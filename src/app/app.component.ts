@@ -13,8 +13,9 @@ export class AppComponent {
   formField: FormGroup;
 	users: Object = [];  
 	condominiumsId: Object = [];
-	databaseMap : Object = []; 
-	selectUserEmail = 'Selecione';  
+	databaseMap : Object = [];   
+  databaseBytes;
+  databaseBytesWithoutHeader64;
 
 	constructor(
 		private service: ServiceComponent,
@@ -22,6 +23,7 @@ export class AppComponent {
 
 		this.formField = this.formBuilder.group({
 	  		database: ['', Validators.required],
+        email: ['', Validators.required],
         result: [''],
 		}); 
 	} 
@@ -30,35 +32,40 @@ export class AppComponent {
 	  return this.formField.controls;
 	}
 
-	readDatabase(){   
-    	this.service.readDatabase(this.form.database.value).subscribe(
+  onFileSelected(event){
+    const target= event.target as HTMLInputElement;
+    var file: File = (target.files as FileList)[0];    
+   
+    var myReader:FileReader = new FileReader();
+    myReader.onloadend = (e) => {
+      this.databaseBytes = myReader.result; 
+    }
+    myReader.readAsDataURL(file); 
+  }
+
+  readDatabase(){   
+    if(this.databaseBytes != null){ 
+      this.databaseBytesWithoutHeader64 = this.databaseBytes.split(',')[1];
+      this.service.readDatabase(this.databaseBytesWithoutHeader64).subscribe(
         	(data:any)=> {
-           	 	console.log(data);  
            	 	this.databaseMap =  data;
            	 	this.users =  data.users;
            	 	this.condominiumsId =  data.condominiumsId;
-
-           	 	console.log(this.users);  
-			        console.log(this.condominiumsId);  
-
+              alert("Banco de dados carregado");
         	},
         	error => {
         	    this.service.handleErrors(error);
-           		console.log(error); //arrumar file não encontrado!
-      });	
-    }  
+      });	 
+    }
+  }  
 
-  	findHigherUserPermissions(){ 
-      if(this.selectUserEmail != 'Selecione'){
-        this.service.findHigherUserPermissions(this.selectUserEmail,this.databaseMap).subscribe(
-            (data:any)=> {
-                console.log(data); 
-                this.form.result.setValue(data.result);         
-            },
-            error => {
-              this.service.handleErrors(error);
-              console.log(error);
-        }); 
-      }
-    } 
+	findHigherUserPermissions(){ 
+      this.service.findHigherUserPermissions(this.form.email.value,this.databaseMap).subscribe(
+          (data:any)=> {
+              this.form.result.setValue(data.result);         
+          },
+          error => {
+            this.service.handleErrors(error);
+      }); 
+  } 
 }

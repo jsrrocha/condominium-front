@@ -1,31 +1,35 @@
 <div class="form-container">
   <form ngNativeValidate [formGroup]="formField"> 
       <h2>Encontrar permissões mais altas do usuário</h2>
-      
-      <div class="form-group">
-          <label for="database"> Insira o caminho completo do arquivo de banco de dados: </label> 
-          <input type="text" formControlName="database"
-                 class="form-control" name="database"
-                 ng-model="database" required />        
-      <button name="button-db" class="btn login"
-              (click) ="readDatabase()"> Carregar </button>  
-      </div>  
-      <label> Selecione o usuário: </label> 
-      <mat-form-field >
-          <mat-select  [(value)]="selectUserEmail"  required>
-            <mat-option *ngFor="let user of users" [value]="user.email">  
-              {{user.email}} 
-            </mat-option>
-          </mat-select>
-      </mat-form-field>   
+      <div>
+        <mat-form-field  class="form-style">
+          <input readonly required id="input-text-src" formControlName="database" class="input-text-src" matInput placeholder="Selecione o arquivo" />
+          <input  id="input-text" type="file" style="display: none;" (change)="onFileSelected($event)" />
+          <label matSuffix for="input-text">
+             <mat-icon  matTooltip="Clique para escolher">cloud_upload</mat-icon>
+          </label>
+        </mat-form-field>
+        
+        <button name="button-find" class="btn login"
+              (click) ="readDatabase()"> Carregar banco de dados </button> 
+      </div>
 
-      <button name="button-find" class="btn login"
-              (click) ="findHigherUserPermissions()"> Procurar </button>  
+      <div class="form-group">
+          <label for="email"> Insira o email do usuário: </label> 
+          <input type="text" formControlName="email"
+                 class="form-control" name="email"
+                 ng-model="email" />  
+
+          <button name="button-find" class="btn login"
+              (click) ="findHigherUserPermissions()"> Procurar </button> 
+      </div>     
+      
+       
     <br/>
     <br/>
     <!-- result insertion-->
     <textarea id="result" rows="2" cols="60" maxlength="254" wrap="hard" formControlName="result" matInput placeholder="Resultado" ></textarea>
-
+   
   </form>
 </div>
 

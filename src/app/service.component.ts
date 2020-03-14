@@ -7,7 +7,8 @@ import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 
 export class ServiceComponent {
 
-  backendUrl =  "https://condominium-back.herokuapp.com/"; 
+  backendUrl =  "http://localhost:8080/";
+  //backendUrl = "https://condominium-front.netlify.com/";
 
   constructor(private http: HttpClient) {}
 
@@ -17,7 +18,7 @@ export class ServiceComponent {
   }
 
   findHigherUserPermissions(email: string, data: object){
-      const url = this.backendUrl + "/user/" + email + "/permission/find"; 
+      const url = this.backendUrl + "user/" + email + "/permission/find"; 
       return this.http.post(url,data);  
   } 
 
