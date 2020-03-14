@@ -6,7 +6,7 @@ import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 })
 
 export class ServiceComponent {
-  backendUrl = "https://condominium-front.netlify.com/";
+  backendUrl = "https://condominium-back.herokuapp.com/"
 
   constructor(private http: HttpClient) {}
 
