@@ -6,9 +6,7 @@ import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 })
 
 export class ServiceComponent {
-
-  backendUrl =  "http://localhost:8080/";
-  //backendUrl = "https://condominium-front.netlify.com/";
+  backendUrl = "https://condominium-front.netlify.com/";
 
   constructor(private http: HttpClient) {}
 
